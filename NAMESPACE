@@ -2,5 +2,4 @@
 
 export(ebcd)
 export(ebcd.block)
-export(ebcd.nullcheck)
 export(ebcd.update1)
