@@ -21,6 +21,8 @@ ebcd <- function(data,
                                          #ebnm.fn = c(ebnm::ebnm_normal, ebnm.fn),
                                          ebnm.fn = c(ebnm_norm1, ebnm.fn),
                                          verbose = verbose)
+  ebcd.obj$flash.fit$verbose.lvl <- verbose
+
   if (compact) {
     svdY <- svd(ebcd.obj$flash.fit$Y) # Y \approx UC
     ebcd.obj$flash.fit$Y <- diag(svdY$d) %*% t(svdY$v)
