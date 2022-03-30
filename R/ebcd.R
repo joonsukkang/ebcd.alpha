@@ -8,9 +8,11 @@ ebcd <- function(data,
                  verbose = 1L){
 
   if (any(is.na(data))) { stop('missing values not allowed') }
-  if (nrow(data) < ncol(data)) {
-    cat(paste0("compactifying not used (nrow < ncol) \n"))
+  if ( (compact==TRUE) & (nrow(data) < ncol(data)) ) {
     compact <- FALSE
+    if(verbose>=1){
+      cat(paste0("compactifying not used (nrow < ncol) \n"))
+      }
     }
   greedy.Kmax <- min(greedy.Kmax, dim(data)-1) # to satisfy orthogonality of L
 
