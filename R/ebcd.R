@@ -5,6 +5,7 @@ ebcd <- function(data,
                  S = NULL,
                  ebnm.fn = ebnm::ebnm_point_laplace,
                  greedy.Kmax = 10L,
+                 sampleratio = 1,
                  verbose = 1L){
 
   if (any(is.na(data))) { stop('missing values not allowed') }
@@ -18,9 +19,9 @@ ebcd <- function(data,
 
 
   ebcd.obj <- flashier::flash.init(data, S = S, var.type = 0)
+  ebcd.obj$flash.fit$n.nonmissing <- sampleratio * ebcd.obj$flash.fit$n.nonmissing
   ebcd.obj <- flashier::flash.add.greedy(ebcd.obj,
                                          Kmax = greedy.Kmax,
-                                         #ebnm.fn = c(ebnm::ebnm_normal, ebnm.fn),
                                          ebnm.fn = c(ebnm_norm1, ebnm.fn),
                                          verbose = verbose)
   ebcd.obj$flash.fit$verbose.lvl <- verbose
