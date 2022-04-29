@@ -8,7 +8,8 @@ ebcd <- function(data,
                  greedy.Kmax = 10L,
                  sampleratio = 1,
                  verbose = 1L,
-                 seed = 1){
+                 seed = 1,
+                 block.maxiter = 500){
 
   if (any(is.na(data))) { stop('missing values not allowed') }
   if ( (compact==TRUE) & (nrow(data) < ncol(data)) ) {
@@ -65,7 +66,7 @@ ebcd <- function(data,
 
 
   ebcd.obj <- ebcd.scale(ebcd.obj)
-  ebcd.obj <- ebcd.block(ebcd.obj)
+  ebcd.obj <- ebcd.block(ebcd.obj, maxiter = block.maxiter)
   #ebcd.obj <- ebcd.nullcheck(ebcd.obj)
 
   return(ebcd.obj)
