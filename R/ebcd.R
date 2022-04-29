@@ -7,7 +7,8 @@ ebcd <- function(data,
                  ebnm.fn = ebnm::ebnm_point_laplace,
                  greedy.Kmax = 10L,
                  sampleratio = 1,
-                 verbose = 1L){
+                 verbose = 1L,
+                 seed = 1){
 
   if (any(is.na(data))) { stop('missing values not allowed') }
   if ( (compact==TRUE) & (nrow(data) < ncol(data)) ) {
@@ -38,6 +39,14 @@ ebcd <- function(data,
 
     L <- vm$loadings
     Z <- data.svd$u %*% vm$rotmat
+    list.ZL <- list(Z, L)
+
+    ebcd.obj <- flashier::flash.init.factors(ebcd.obj,
+                                             init = list.ZL)
+  }else if (init == 'random'){
+    set.seed(seed)
+    Z <- rstiefel::rustiefel(nrow(data), greedy.Kmax)
+    L <- crossprod(data, Z)
     list.ZL <- list(Z, L)
 
     ebcd.obj <- flashier::flash.init.factors(ebcd.obj,

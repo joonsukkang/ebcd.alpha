@@ -15,4 +15,5 @@ BugReports: https://github.com/joonsukkang/ebcd.alpha/issues
 Imports: 
     ebnm,
     flashier (>= 0.2.27),
-    irlba
+    irlba,
+    rstiefel
