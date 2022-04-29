@@ -1,6 +1,7 @@
 #' @export
 
 ebcd <- function(data,
+                 init = 'deflation',
                  compact = TRUE,
                  S = NULL,
                  ebnm.fn = ebnm::ebnm_point_laplace,
@@ -17,13 +18,32 @@ ebcd <- function(data,
     }
   greedy.Kmax <- min(greedy.Kmax, dim(data)-1) # to satisfy orthogonality of L
 
-
   ebcd.obj <- flashier::flash.init(data, S = S, var.type = 0)
   ebcd.obj$flash.fit$n.nonmissing <- sampleratio * ebcd.obj$flash.fit$n.nonmissing
-  ebcd.obj <- flashier::flash.add.greedy(ebcd.obj,
-                                         Kmax = greedy.Kmax,
-                                         ebnm.fn = c(ebnm_norm1, ebnm.fn),
-                                         verbose = verbose)
+
+  if (init == 'deflation'){
+    ebcd.obj <- flashier::flash.add.greedy(ebcd.obj,
+                                           Kmax = greedy.Kmax,
+                                           ebnm.fn = c(ebnm_norm1, ebnm.fn),
+                                           verbose = verbose)
+  }else if (init == 'svd'){
+    ebcd.obj <- flashier::flash.init.factors(ebcd.obj,
+                                             init = svd(data,
+                                                        nu = greedy.Kmax,
+                                                        nv = greedy.Kmax))
+  }else if (init == 'varimax'){
+    data.svd <- svd(data, nu = greedy.Kmax, nv = greedy.Kmax)
+    L <- data.svd$v %*% diag(x = data.svd$d[1:greedy.Kmax], nrow=greedy.Kmax)
+    vm <- varimax(L)
+
+    L <- vm$loadings
+    Z <- data.svd$u %*% vm$rotmat
+    list.ZL <- list(Z, L)
+
+    ebcd.obj <- flashier::flash.init.factors(ebcd.obj,
+                                             init = list.ZL)
+  }
+
   ebcd.obj$flash.fit$verbose.lvl <- verbose
 
   if (compact) {
@@ -33,6 +53,7 @@ ebcd <- function(data,
     ebcd.obj$flash.fit$EF[[1]] <- crossprod(svdY$u, ebcd.obj$flash.fit$EF[[1]])
     ebcd.obj$flash.fit$EF2[[1]] <- ebcd.obj$flash.fit$EF[[1]]^2
   }
+
 
   ebcd.obj <- ebcd.scale(ebcd.obj)
   ebcd.obj <- ebcd.block(ebcd.obj)
