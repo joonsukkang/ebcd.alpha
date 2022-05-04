@@ -45,10 +45,20 @@ ebcd.block <- function(ebcd.obj,
     ebcd.fit$EF[[1]]  <- ebcd.fit$U %*% ebcd.fit$EF[[1]]
     ebcd.fit$EF2[[1]] <- ebcd.fit$EF[[1]]^2
   }
+
   ebcd.obj <- flashier_wrapup.flash(ebcd.fit, output.lvl = 3L)
+
   ebcd.obj$L.psd  <- NULL
   ebcd.obj$L.lfsr <- NULL
   ebcd.obj$L.ghat <- NULL
+
+  # rename (L,F) to (Z,L)
+  names(ebcd.obj)[names(ebcd.obj)=='L.pm'] <- 'Z'
+  names(ebcd.obj)[names(ebcd.obj)=='F.pm'] <- 'L.pm'
+  names(ebcd.obj)[names(ebcd.obj)=='F.psd'] <- 'L.psd'
+  names(ebcd.obj)[names(ebcd.obj)=='F.lfsr'] <- 'L.lfsr'
+  names(ebcd.obj)[names(ebcd.obj)=='F.ghat'] <- 'L.ghat'
+
 
   flashier_report.completion(verbose.lvl)
 
