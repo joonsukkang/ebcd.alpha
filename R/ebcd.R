@@ -9,7 +9,7 @@ ebcd <- function(data,
                  sampleratio = 1,
                  verbose = 1L,
                  seed = 1,
-                 block.maxiter = 500){
+                 block.maxiter = 5000){
 
   if (any(is.na(data))) { stop('missing values not allowed') }
   if ( (compact==TRUE) & (nrow(data) < ncol(data)) ) {

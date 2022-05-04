@@ -1,7 +1,7 @@
 #' @export
 
 ebcd.block <- function(ebcd.obj,
-                       maxiter = 500,
+                       maxiter = 5000,
                        tol = flashier_set.default.tol(ebcd.obj$flash.fit)
                        ){
 
