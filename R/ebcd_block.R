@@ -2,7 +2,7 @@
 
 ebcd.block <- function(ebcd.obj,
                        maxiter = 5000,
-                       tol = flashier_set.default.tol(ebcd.obj$flash.fit)
+                       tol = sqrt(.Machine$double.eps) * ebcd.obj$flash.fit$n.nonmissing
                        ){
 
   ebcd.fit <- ebcd.obj$flash.fit
