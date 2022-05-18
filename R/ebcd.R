@@ -9,7 +9,8 @@ ebcd <- function(data,
                  sampleratio = 1,
                  verbose = 1L,
                  seed = 1,
-                 block.maxiter = 5000){
+                 block.maxiter = 5000,
+                 list.ZL = NULL){
 
   if (any(is.na(data))) { stop('missing values not allowed') }
   if ( (compact==TRUE) & (nrow(data) < ncol(data)) ) {
@@ -50,6 +51,9 @@ ebcd <- function(data,
     L <- crossprod(data, Z)
     list.ZL <- list(Z, L)
 
+    ebcd.obj <- flashier::flash.init.factors(ebcd.obj,
+                                             init = list.ZL)
+  }else if (init == 'manual'){
     ebcd.obj <- flashier::flash.init.factors(ebcd.obj,
                                              init = list.ZL)
   }
