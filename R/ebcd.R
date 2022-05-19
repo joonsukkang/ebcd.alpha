@@ -10,7 +10,7 @@ ebcd <- function(data,
                  verbose = 1L,
                  seed = 1,
                  block.maxiter = 5000,
-                 list.ZL = NULL){
+                 list.ZL = NULL, tol = NULL){
 
   if (any(is.na(data))) { stop('missing values not allowed') }
   if ( (compact==TRUE) & (nrow(data) < ncol(data)) ) {
@@ -70,7 +70,8 @@ ebcd <- function(data,
 
 
   ebcd.obj <- ebcd.scale(ebcd.obj)
-  ebcd.obj <- ebcd.block(ebcd.obj, maxiter = block.maxiter)
+  if(is.null(tol)){tol <- sqrt(.Machine$double.eps) * ebcd.obj$flash.fit$n.nonmissing}
+  ebcd.obj <- ebcd.block(ebcd.obj, maxiter = block.maxiter, tol = tol)
   #ebcd.obj <- ebcd.nullcheck(ebcd.obj)
 
   return(ebcd.obj)
